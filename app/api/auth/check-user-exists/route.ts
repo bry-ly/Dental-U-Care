@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!existingUser) {
-      // User doesn't exist, sign them out
+      // User doesn't exist (shouldn't happen if session exists, but safe to handle)
       await auth.api.signOut({
         headers: await headers(),
       });
@@ -36,6 +36,34 @@ export async function GET(request: NextRequest) {
           exists: false,
           error: "USER_NOT_FOUND",
           message: "No account found with this email address",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Check if the user was created recently (e.g., within the last 10 seconds)
+    // This indicates they just signed up via the Login page, which we want to prevent
+    const userCreatedAt = new Date(existingUser.createdAt).getTime();
+    const now = Date.now();
+    const isNewUser = now - userCreatedAt < 10000; // 10 seconds threshold
+
+    if (isNewUser) {
+      // User was just created, so we delete them to prevent "accidental" sign up
+      await prisma.user.delete({
+        where: { id: existingUser.id },
+      });
+
+      // Sign them out
+      await auth.api.signOut({
+        headers: await headers(),
+      });
+
+      return NextResponse.json(
+        {
+          exists: false,
+          error: "USER_NOT_FOUND",
+          message:
+            "No account found with this email address. Please sign up first.",
         },
         { status: 403 }
       );
@@ -54,4 +82,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
