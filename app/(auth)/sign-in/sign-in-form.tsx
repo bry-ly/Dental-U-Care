@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-session/auth-client";
 import { toast } from "sonner";
 import { Loader2, AlertCircle } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Dialog,
   DialogContent,
@@ -44,6 +45,7 @@ export function LoginForm({
   const [showVerifyNotice, setShowVerifyNotice] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const form = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
@@ -73,6 +75,7 @@ export function LoginForm({
             const user = ctx.data?.user;
             const role = user?.role;
 
+            setIsRedirecting(true);
             setShowVerifyNotice(false);
 
             // Determine target based on role
@@ -81,16 +84,16 @@ export function LoginForm({
                 ? "/dashboard/admin"
                 : role === "dentist"
                   ? "/dashboard/dentist"
-                  : role === "patient"
+                  : role === "patient" || role === "user" // Handle legacy "user" role
                     ? "/dashboard/patient"
-                    : "/";
+                    : "/dashboard"; // Fallback to dashboard dispatcher
 
             const description =
               role === "admin"
                 ? "Redirecting to admin panel..."
                 : role === "dentist"
                   ? "Redirecting to dentist portal..."
-                  : role === "patient"
+                  : role === "patient" || role === "user"
                     ? "Redirecting to patient portal..."
                     : "Welcome back!";
 
@@ -111,9 +114,10 @@ export function LoginForm({
               });
             } else {
               setShowVerifyNotice(false);
-              toast.error("Login failed", {
-                description: ctx.error.message || "Invalid email or password.",
-              });
+              setErrorMessage(
+                ctx.error.message || "Invalid email or password."
+              );
+              setShowErrorDialog(true);
             }
             setIsLoading(false);
           },
@@ -177,7 +181,8 @@ export function LoginForm({
           if (!data.exists) {
             // User doesn't exist
             setErrorMessage(
-              data.message || "No account found with this email address. Please sign up first or use a different email."
+              data.message ||
+                "No account found with this email address. Please sign up first or use a different email."
             );
             setShowErrorDialog(true);
             // Clean up URL
@@ -190,7 +195,9 @@ export function LoginForm({
                 ? "/dashboard/admin"
                 : role === "dentist"
                   ? "/dashboard/dentist"
-                  : "/dashboard/patient";
+                  : "/dashboard/patient"; // Default to patient for "patient" or "user" or undefined
+
+            setIsRedirecting(true);
             window.location.href = target;
           }
         } catch (error) {
@@ -204,9 +211,14 @@ export function LoginForm({
 
       // Handle direct error parameters
       if (error) {
-        if (error === "USER_NOT_FOUND" || error.includes("user") || error.includes("email")) {
+        if (
+          error === "USER_NOT_FOUND" ||
+          error.includes("user") ||
+          error.includes("email")
+        ) {
           setErrorMessage(
-            message || "No account found with this email address. Please sign up first or use a different email."
+            message ||
+              "No account found with this email address. Please sign up first or use a different email."
           );
           setShowErrorDialog(true);
           // Clean up URL
@@ -214,7 +226,8 @@ export function LoginForm({
         } else {
           // Handle other OAuth errors
           setErrorMessage(
-            message || "An error occurred during Google sign-in. Please try again."
+            message ||
+              "An error occurred during Google sign-in. Please try again."
           );
           setShowErrorDialog(true);
           window.history.replaceState({}, "", window.location.pathname);
@@ -329,7 +342,9 @@ export function LoginForm({
                     />
                   </FormControl>
                   <button
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                     onClick={togglePassword}
                     type="button"
                     className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center p-1 text-sm opacity-70 hover:opacity-100"
@@ -379,69 +394,69 @@ export function LoginForm({
               </Field>
             )}
           />
-        <Field>
-          <Button type="submit" disabled={isLoading || isGoogleLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="size-4 animate-spin mr-2" />
-                {"Logging in..."}
-              </>
-            ) : (
-              "Login"
-            )}
-          </Button>
-        </Field>
-        <FieldSeparator>Or continue with</FieldSeparator>
-        <Field>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={handleGoogleSignIn}
-            disabled={isLoading || isGoogleLoading}
-          >
-            {isGoogleLoading ? (
-              <>
-                <Loader2 className="size-4 animate-spin mr-2" />
-                {"Signing in..."}
-              </>
-            ) : (
-              <>
-                <svg
-                  width="800px"
-                  height="800px"
-                  viewBox="-3 0 262 262"
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="xMidYMid"
-                  className="size-4 mr-2"
-                >
-                  <path
-                    d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
-                    fill="#4285F4"
-                  />
-                  <path
-                    d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
-                    fill="#34A853"
-                  />
-                  <path
-                    d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"
-                    fill="#FBBC05"
-                  />
-                  <path
-                    d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
-                    fill="#EB4335"
-                  />
-                </svg>
-                Login with Google
-              </>
-            )}
-          </Button>
-          <FieldDescription className="text-center">
-            Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="underline underline-offset-4">
-              Sign up
-            </Link>
-          </FieldDescription>
-        </Field>
+          <Field>
+            <Button type="submit" disabled={isLoading || isGoogleLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin mr-2" />
+                  {"Logging in..."}
+                </>
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </Field>
+          <FieldSeparator>Or continue with</FieldSeparator>
+          <Field>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading || isGoogleLoading}
+            >
+              {isGoogleLoading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin mr-2" />
+                  {"Signing in..."}
+                </>
+              ) : (
+                <>
+                  <svg
+                    width="800px"
+                    height="800px"
+                    viewBox="-3 0 262 262"
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="xMidYMid"
+                    className="size-4 mr-2"
+                  >
+                    <path
+                      d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
+                      fill="#34A853"
+                    />
+                    <path
+                      d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
+                      fill="#EB4335"
+                    />
+                  </svg>
+                  Login with Google
+                </>
+              )}
+            </Button>
+            <FieldDescription className="text-center">
+              Don&apos;t have an account?{" "}
+              <Link href="/sign-up" className="underline underline-offset-4">
+                Sign up
+              </Link>
+            </FieldDescription>
+          </Field>
         </FieldGroup>
       </form>
 
@@ -459,10 +474,7 @@ export function LoginForm({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowErrorDialog(false)}
-            >
+            <Button variant="outline" onClick={() => setShowErrorDialog(false)}>
               Close
             </Button>
             <Button asChild>
@@ -471,6 +483,16 @@ export function LoginForm({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Redirecting Spinner Overlay */}
+      {isRedirecting && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm rounded-lg">
+          <Spinner variant="pinwheel" className="size-10 text-primary" />
+          <p className="mt-4 text-sm font-medium text-muted-foreground animate-pulse">
+            Redirecting to dashboard...
+          </p>
+        </div>
+      )}
     </Form>
   );
 }
