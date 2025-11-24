@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/types/prisma";
 import { auth } from "@/lib/auth-session/auth";
-import { headers } from "next/headers";
+import { hashPassword } from "better-auth/crypto";
 
 /**
  * Helper to check if user is admin
@@ -53,20 +53,38 @@ export async function PATCH(
 
       if (password.length < 8) {
         return NextResponse.json(
-          { success: false, error: "Password must be at least 8 characters long" },
+          {
+            success: false,
+            error: "Password must be at least 8 characters long",
+          },
           { status: 400 }
         );
       }
 
-      // Update password using Better Auth admin API
+      // Update password manually using Prisma and better-auth hashing
       try {
-        await auth.api.setUserPassword({
-          body: {
+        const hashedPassword = await hashPassword(password);
+
+        // Update the password in the Account model (providerId: "credential")
+        const accountUpdate = await prisma.account.updateMany({
+          where: {
             userId: id,
-            newPassword: password,
+            providerId: "credential",
           },
-          headers: await headers(),
+          data: { password: hashedPassword },
         });
+
+        if (accountUpdate.count === 0) {
+          // If no credential account exists, we might need to create one or handle it.
+          // For now, we'll return an error if we can't find the account to update.
+          return NextResponse.json(
+            {
+              success: false,
+              error: "User does not have a credential account to update.",
+            },
+            { status: 400 }
+          );
+        }
       } catch (error) {
         console.error("Error setting password:", error);
         return NextResponse.json(
@@ -89,8 +107,10 @@ export async function PATCH(
     if (name !== undefined) updateData.name = name;
     if (email !== undefined) updateData.email = email;
     if (phone !== undefined) updateData.phone = phone || null;
-    if (specialization !== undefined) updateData.specialization = specialization || null;
-    if (qualifications !== undefined) updateData.qualifications = qualifications || null;
+    if (specialization !== undefined)
+      updateData.specialization = specialization || null;
+    if (qualifications !== undefined)
+      updateData.qualifications = qualifications || null;
     if (experience !== undefined) {
       updateData.experience = experience ? parseInt(String(experience)) : null;
     }
@@ -112,7 +132,8 @@ export async function PATCH(
     });
   } catch (error) {
     console.error("[PATCH /api/admin/dentists/[id]] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     const statusCode = errorMessage.includes("Unauthorized") ? 401 : 500;
     return NextResponse.json(
       { success: false, error: errorMessage },
@@ -146,7 +167,8 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("[DELETE /api/admin/dentists/[id]] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     const statusCode = errorMessage.includes("Unauthorized") ? 401 : 500;
     return NextResponse.json(
       { success: false, error: errorMessage },
@@ -154,4 +176,3 @@ export async function DELETE(
     );
   }
 }
-
