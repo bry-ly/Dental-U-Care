@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin } from "better-auth/plugins";
 import { prisma } from "@/lib/types/prisma";
 import { sendAuthEmail } from "@/lib/email/send-email";
 
@@ -123,6 +122,7 @@ export const auth = betterAuth({
       role: {
         type: "string",
         required: false,
+        defaultValue: "patient",
         input: false, // Don't allow direct input
       },
     },
@@ -193,11 +193,5 @@ export const auth = betterAuth({
   },
 
   // Plugins (nextCookies must be last)
-  plugins: [
-    admin({
-      // Admin users are identified by role === "admin"
-      // This is handled by the role field in the user model
-    }),
-    nextCookies(),
-  ],
+  plugins: [nextCookies()],
 });

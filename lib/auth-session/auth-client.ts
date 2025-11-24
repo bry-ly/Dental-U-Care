@@ -1,7 +1,11 @@
 import { createAuthClient } from "better-auth/react";
 import { toast } from "sonner";
-import { organizationClient } from "better-auth/client/plugins";
+import {
+  organizationClient,
+  inferAdditionalFields,
+} from "better-auth/client/plugins";
 import { stripeClient } from "@better-auth/stripe/client";
+import type { auth } from "@/lib/auth-session/auth";
 
 /**
  * Better Auth Client Configuration
@@ -44,6 +48,7 @@ export const authClient = createAuthClient({
   // Plugins
   plugins: [
     organizationClient(),
+    inferAdditionalFields<typeof auth>(),
     stripeClient({
       subscription: true,
     }),
