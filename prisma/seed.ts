@@ -8,14 +8,14 @@ const prisma = new PrismaClient();
 const dentistProfiles = [
   {
     ...doctors[0],
-    email: "kath.estrada@dentalucare.com",
+    email: "Kath.estrada@dentalucare.com",
     phone: "+63 912 345 6789",
     qualifications: "Doctor of Dental Medicine (DMD), Orthodontics Specialist",
     experience: 8,
   },
   {
     ...doctors[1],
-    email: "clyrelle.cervantes@dentalucare.com",
+    email: "Jewel.mendano@dentalucare.com",
     phone: "+63 912 345 6790",
     qualifications:
       "Doctor of Dental Surgery (DDS), Cosmetic Dentistry Specialist",
@@ -23,14 +23,14 @@ const dentistProfiles = [
   },
   {
     ...doctors[2],
-    email: "von.arguelles@dentalucare.com",
+    email: "Jedd.offianga@dentalucare.com",
     phone: "+63 912 345 6791",
     qualifications: "Doctor of Dental Medicine (DMD), Oral Surgery Specialist",
     experience: 10,
   },
   {
     ...doctors[3],
-    email: "dexter.cabanag@dentalucare.com",
+    email: "Marthaliza.herher@dentalucare.com",
     phone: "+63 912 345 6792",
     qualifications: "Doctor of Dental Surgery (DDS), Periodontics Specialist",
     experience: 7,

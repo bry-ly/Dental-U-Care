@@ -1,7 +1,6 @@
-
 datasource db {
-  provider = "mongodb"
-  url = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -85,7 +84,7 @@ model Service {
 }
 
 model Appointment {
-  id           String            @id @default(auto()) @map("_id") @db.ObjectId
+  id           String            @id @default(cuid()) @map("_id")
   patientId    String
   dentistId    String
   serviceId    String // Changed to String to match Service.id
@@ -106,8 +105,8 @@ model Appointment {
 }
 
 model Payment {
-  id                    String        @id @default(auto()) @map("_id") @db.ObjectId
-  appointmentId         String        @unique @db.ObjectId
+  id                    String        @id @default(cuid()) @map("_id")
+  appointmentId         String        @unique
   userId                String
   amount                Float
   method                PaymentMethod
@@ -131,7 +130,7 @@ model Payment {
 }
 
 model Notification {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid()) @map("_id")
   userId    String
   title     String
   message   String
@@ -146,7 +145,7 @@ model Notification {
 }
 
 model ChatMessage {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(cuid()) @map("_id")
   userId     String
   message    String
   isFromUser Boolean  @default(true)
@@ -207,7 +206,7 @@ model Verification {
 }
 
 model Subscription {
-  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String    @id @default(cuid()) @map("_id")
   plan                 String
   referenceId          String    @unique
   stripeCustomerId     String?
@@ -224,5 +223,3 @@ model Subscription {
 
   @@map("subscription")
 }
-
-

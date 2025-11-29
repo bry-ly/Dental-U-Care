@@ -48,7 +48,7 @@ export const auth = betterAuth({
   },
   // Database adapter
   database: prismaAdapter(prisma, {
-    provider: "mongodb",
+    provider: "postgresql",
   }),
 
   // Email & Password authentication

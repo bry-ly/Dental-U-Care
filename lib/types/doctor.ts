@@ -17,20 +17,20 @@ export const doctors: Doctor[] = [
   },
   {
     id: "doctor-2",
-    name: "Clyrelle Jade Cervantes",
+    name: "Jedd Offianga",
     role: "Cosmetic Dentistry Specialist",
-    avatar: "/cervs.jpg",
+    avatar: "/jedd.jpg",
   },
   {
     id: "doctor-3",
-    name: "Von Vryan Arguelles",
+    name: "Jewel Mendano",
     role: "Oral Surgeon",
-    avatar: "/von.jpg",
+    avatar: "/jewel.jpg",
   },
   {
     id: "doctor-4",
-    name: "Dexter Cabanag",
+    name: "Marthaliza Herher",
     role: "Periodontist",
-    avatar: "/dexter.jpg",
+    avatar: "/tooth.svg",
   },
 ];
