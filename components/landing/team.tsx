@@ -51,7 +51,7 @@ const Team = ({
       name: "Marthaliza Herher",
       role: "Periodontist",
       avatar:
-        "/tooth.svg",
+        "/martha.jpg",
       
     },
   ],
