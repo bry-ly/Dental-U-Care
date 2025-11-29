@@ -31,6 +31,6 @@ export const doctors: Doctor[] = [
     id: "doctor-4",
     name: "Marthaliza Herher",
     role: "Periodontist",
-    avatar: "/tooth.svg",
+    avatar: "/martha.jpg",
   },
 ];

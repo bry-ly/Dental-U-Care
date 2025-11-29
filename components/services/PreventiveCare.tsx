@@ -26,7 +26,7 @@ export function PreventiveCare() {
           <h3 className="text-xl font-bold">General Dentistry</h3>
           <div className="flex items-center gap-4 sm:ml-15">
             <Image
-              src="/marthaliza.jpg"
+              src="/martha.jpg"
               alt="Marthaliza Herher"
               className="w-10 h-10 rounded-full object-cover border"
               width={40}
