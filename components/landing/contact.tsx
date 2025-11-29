@@ -17,8 +17,8 @@ const Contact = ({
   title = "Get In Touch",
   description = "Have questions about our services or need help with booking? We're here to help! Reach out to us and we'll get back to you as soon as possible.",
   phone = "(+63) 917-123-4567",
-  email = "info@dentalucare.com",
-  web = { label: "dentalucare.com", url: "https://dentalucare.com" },
+  email = "info@dentalucare.tech",
+  web = { label: "dentalucare.tech", url: "https://dentalucare.tech" },
 }: Contact2Props) => {
   return (
     <section className="py-32">

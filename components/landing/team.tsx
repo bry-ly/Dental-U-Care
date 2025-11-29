@@ -33,25 +33,25 @@ const Team = ({
     },
     {
       id: "member-2",
-      name: "Clyrelle Jade Cervantes",
+      name: "Jedd Offianga",
       role: "Cosmetic Dentistry Specialist",
       avatar:
-        " /cervs.jpg",
+        " /jedd.jpg",
     },
     {
       id: "member-3",
-      name: "Von Vryan Arguelles",
+      name: "Jewel Mendano",
       role: "Oral Surgeon",
       avatar:
-        "/von.jpg",
+        "/jewel.jpg",
      
     },
     {
       id: "member-4",
-      name: "Dexter Cabanag",
+      name: "Marthaliza Herher",
       role: "Periodontist",
       avatar:
-        "/dexter.jpg",
+        "/tooth.svg",
       
     },
   ],

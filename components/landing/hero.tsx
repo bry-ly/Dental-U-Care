@@ -52,7 +52,7 @@ const Hero = () => {
             <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
               <Button size="lg">
                 <Calendar className="mr-2 h-4 w-4" />
-                Book Appointment Now
+                <Link href="/dashboard/patient" className="flex items-center">Book Appointment Now</Link>
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button variant="outline" size="lg">
