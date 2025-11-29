@@ -86,7 +86,7 @@ export async function PATCH(
       where: { id },
       data: {
         workingHours:
-          workingHours as unknown as import("@prisma/client").Prisma.JsonValue,
+          workingHours as unknown as import("@prisma/client").Prisma.InputJsonValue,
       },
     });
 
