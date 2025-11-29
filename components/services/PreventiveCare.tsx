@@ -26,15 +26,15 @@ export function PreventiveCare() {
           <h3 className="text-xl font-bold">General Dentistry</h3>
           <div className="flex items-center gap-4 sm:ml-15">
             <Image
-              src="/dexter.jpg"
-              alt="Dexter Cabanag"
+              src="/marthaliza.jpg"
+              alt="Marthaliza Herher"
               className="w-10 h-10 rounded-full object-cover border"
               width={40}
               height={40}
               priority
             />
-            <span className="font-semibold">Dexter Cabanag</span>
-            <span className="text-primary text-sm">Periodontist</span>
+            <span className="font-semibold">Marthaliza Herher</span>
+          <span className="text-primary text-sm">Periodontist</span>
           </div>
         </div>
         <p className="text-muted-foreground leading-relaxed mb-4">

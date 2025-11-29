@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ShieldAlert } from "lucide-react";
 import Image from "next/image";
 
@@ -23,14 +23,14 @@ export function EmergencyCare() {
           <h3 className="text-xl font-bold">Emergency Dental Care</h3>
           <div className="flex items-center gap-2 sm:ml-4">
             <Image
-              src="/von.jpg"
-              alt="Von Vryan Arguelles"
+              src="/jewel.jpg"
+              alt="Jewel Menadano"
               className="w-10 h-10 rounded-full object-cover border"
               width={40}
               height={40}
               priority
             />
-            <span className="font-semibold">Von Vryan Arguelles</span>
+            <span className="font-semibold">Jewel Mendano</span>
             <span className="text-primary text-sm">Oral Surgeon</span>
           </div>
         </div>

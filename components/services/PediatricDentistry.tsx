@@ -21,7 +21,7 @@ export function PediatricDentistry() {
             <Baby className="h-6 w-6" />
           </div>
           <h3 className="text-xl font-bold">Pediatric Dentistry</h3>
-          <div className="flex items-center gap-2 sm:ml-4">
+          <div className="flex items-center gap-2 sm:ml-2">
             <Image
               src="/kath.jpg"
               alt="Kath Estrada"
@@ -30,9 +30,9 @@ export function PediatricDentistry() {
               height={40}
               priority
             />
-            <span className="font-semibold">Kath Estrada</span>
+          <span className="font-semibold">Kath Estrada</span>
             <span className="text-primary text-sm">
-              Chief Dentist & Orthodontist
+              Chief Dentist & Pediatric Dentist
             </span>
           </div>
         </div>

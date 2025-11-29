@@ -26,14 +26,14 @@ export function CosmeticDentistry() {
           <h3 className="text-xl font-bold">Cosmetic Dentistry</h3>
           <div className="flex items-center gap-2 sm:ml-4">
             <Image
-              src="/cervs.jpg"
-              alt="Clyrelle Jade Cervantes"
+              src="/jedd.jpg"
+              alt="Jedd Offianga"
               className="w-10 h-10 rounded-full object-cover border"
               width={40}
               height={40}
               priority
             />
-            <span className="font-semibold">Clyrelle Jade Cervantes</span>
+            <span className="font-semibold">Jedd Offianga</span>
             <span className="text-primary text-sm">Cosmetic Dentistry Specialist</span>
           </div>
         </div>
