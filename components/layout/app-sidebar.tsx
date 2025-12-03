@@ -78,18 +78,7 @@ const adminData = {
       icon: IconHelp,
     },
   ],
-  documents: [
-    {
-      name: "Analytics",
-      url: "/Dashboard",
-      icon: IconChartBar,
-    },
-    {
-      name: "Reports",
-      url: "/Reports",
-      icon: IconReport,
-    },
-  ],
+
 };
 
 const patientData = {
