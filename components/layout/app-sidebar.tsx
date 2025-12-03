@@ -72,11 +72,6 @@ const adminData = {
       url: "/dashboard/admin/settings",
       icon: IconSettings,
     },
-    {
-      title: "Help & Support",
-      url: "/dashboard/admin/help-support",
-      icon: IconHelp,
-    },
   ],
   documents: [],
 
