@@ -78,6 +78,7 @@ const adminData = {
       icon: IconHelp,
     },
   ],
+  documents: [],
 
 };
 
